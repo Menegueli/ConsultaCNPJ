@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta CNPJ</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h3 {
+            color: #495057;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #495057;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"] {
+    width: calc(100% - 30px); /* Ajuste para compensar padding e margin */
+    padding: 10px;
+    margin: 5px 0; /* Remova ou diminua a margem lateral */
+    font-size: 16px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    transition: border-color 0.3s ease;
+}
+
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.02);
+        }
+
+        .result-section {
+            margin-top: 30px;
+            background-color: #f1f3f5;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+
+        .field-label {
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        .list-group {
+            list-style: none;
+            padding: 0;
+        }
+
+        .list-group-item {
+            background-color: #ffffff;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .alert {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            border: 1px solid #f5c6cb;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Consulta CNPJ</h1>
+    <p class="text-center">Insira o CNPJ para obter informações detalhadas.</p>
+
+    <form method="POST" class="mt-4">
+        <div class="form-group">
+            <label for="cnpj" class="field-label">Digite o CNPJ:</label>
+            <input type="text" id="cnpj" name="cnpj" placeholder="CNPJ (Somente Números)" required>
+        </div>
+        <button type="submit">Consultar</button>
+    </form>
+
+    <!-- Exibição de erros -->
+    {% if error %}
+        <div class="alert" role="alert">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <!-- Exibição de resultados -->
+    {% if result %}
+    <div class="result-section">
+        <h3>Resultado da Consulta</h3>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <span class="field-label">Nome Fantasia:</span> {{ result.nome_fantasia or 'Não disponível' }}
+            </li>
+            <li class="list-group-item">
+                <span class="field-label">Razão Social:</span> {{ result.razao_social }}
+            </li>
+            <li class="list-group-item">
+                <span class="field-label">Capital Social:</span> {{ result.capital_social_formatado }}
+            </li>
+            <li class="list-group-item">
+                <span class="field-label">Sócios:</span> 
+                <ul>
+                    {% for socio in result.socios %}
+                      <li>{{ socio }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li class="list-group-item">
+                <span class="field-label">E-mails:</span> {{ result.emails }}
+            </li>
+            <li class="list-group-item">
+                <span class="field-label">Telefones:</span> 
+                <ul>
+                    {% for telefone in result.telefones %}
+                      <li>{{ telefone }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li class="list-group-item">
+                <span class="field-label">Endereço:</span> {{ result.endereco }}
+            </li>
+            <li class="list-group-item">
+                <span class="field-label">CNAEs:</span>
+                <ul>
+                  {% for cnae in result.cnaes %}
+                    <li>{{ cnae }}</li>
+                  {% endfor %}
+                </ul>
+            </li>
+        </ul>
+    </div>
+    {% endif %}
+</div>
+
+<footer>
+    Desenvolvido por Gabriel Menegueli 🚀
+</footer>
+
+</body>
+</html>
