@@ -1,11 +1,5 @@
 from flask import Flask, render_template, request
 import requests
-import locale
-
-try:
-    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
-except locale.Error:
-    locale.setlocale(locale.LC_ALL, 'pt_BR')
 
 app = Flask(__name__)
 
@@ -31,7 +25,6 @@ def index():
                 "nome_fantasia": data["estabelecimento"]["nome_fantasia"],
                 "razao_social": data["razao_social"],
                 "capital_social": data["capital_social"],
-                "capital_social_formatado": locale.currency(float(data["capital_social"]), grouping=True, symbol='R$'),
                 "socios": [socio["nome"] for socio in data["socios"]],
                 "emails": data["estabelecimento"]["email"] if data["estabelecimento"]["email"] else "Não disponível",
                 "telefones": [
